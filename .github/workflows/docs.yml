@@ -24,10 +24,9 @@ jobs:
           node-version: "18.x"
       - run: npm ci
       - run: npm run build:docs
-      - uses: actions/upload-artifact@v3.1.2
+      - uses: actions/upload-pages-artifact@v2.0.0
         with:
-          name: github-pages
-          path: docs
+          path: docs/
 
   deploy:
     environment:
@@ -38,6 +37,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/upload-pages-artifact@v2.0.0
-        with:
-          path: .
+        uses: actions/deploy-pages@v2
