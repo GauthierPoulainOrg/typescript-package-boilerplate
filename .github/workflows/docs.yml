@@ -26,8 +26,8 @@ jobs:
       - run: npm run build:docs
       - uses: actions/upload-artifact@v3.1.2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
+          name: github-pages
+          path: ./docs
 
   deploy:
     environment:
