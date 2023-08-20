@@ -6,7 +6,6 @@ on:
       - main
 
 jobs:
-  # build npm package
   build:
     runs-on: self-hosted
     steps:
@@ -21,7 +20,6 @@ jobs:
           name: build
           path: dist
 
-  # deploy npm package
   deploy:
     needs: build
     runs-on: self-hosted
