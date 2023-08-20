@@ -6,6 +6,7 @@ on:
       - main
 
 jobs:
+  # build and upload artifact
   build:
     runs-on: self-hosted
     steps:
@@ -13,9 +14,57 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          registry-url: 'https://registry.npmjs.org'
       - run: npm ci
       - run: npm run build
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: build
+
+  # run tests on artifact
+  test:
+    runs-on: self-hosted
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm ci
+      - uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: build
+      - run: npm run test
+
+  # lint
+  lint:
+    runs-on: self-hosted
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm ci
+      - uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: build
+      - run: npm run lint
+
+    # deploy to npm
+  # deploy:
+  #   runs-on: self-hosted
+  #   needs: [build, test, lint]
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 18
+  #         registry-url: 'https://registry.npmjs.org'
+  #     - run: npm ci
+  #     - run: npm run build
+  #     - run: npm publish
+  #       env:
+  #         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
