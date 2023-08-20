@@ -12,12 +12,13 @@
   ],
   "scripts": {
     "dev": "rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript --watch",
-    "build": "rollup -c",
-    "test": "jest",
+    "build": "rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
+    "build:docs": "typedoc src --out docs",
+    "build:types": "tsc -p ./tsconfig.json --outDir build --declaration true && api-extractor run",
+    "postbuild": "npm run build:types",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "build:types": "tsc -p ./tsconfig.json --outDir build --declaration true && api-extractor run",
-    "build:docs": "typedoc src --out docs"
+    "test": "jest"
   },
   "keywords": [
     "appwrite"
