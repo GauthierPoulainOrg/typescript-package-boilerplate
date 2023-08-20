@@ -16,7 +16,16 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
-  "ignorePatterns": ["babel.config.cjs", "node_modules"],
+  "ignorePatterns": [
+    "babel.config.cjs",
+    "node_modules",
+    "build",
+    "dist",
+    "coverage",
+    "jest.config.js",
+    "rollup.config.js",
+    "docs"
+  ],
   "plugins": ["@typescript-eslint/eslint-plugin"],
   "rules": {
     "@typescript-eslint/no-unused-vars": "warn",

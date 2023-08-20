@@ -6,9 +6,30 @@ on:
       - main
 
 jobs:
-  # build and upload artifact
+  test:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm ci
+      - run: npm run test
+
+  lint:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm ci
+      - run:
+          npm run lint
+
   build:
     runs-on: self-hosted
+    needs: [test, lint]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -21,42 +42,10 @@ jobs:
           name: build
           path: build
 
-  # run tests on artifact
-  test:
-    runs-on: self-hosted
-    needs: build
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - run: npm ci
-      - uses: actions/download-artifact@v2
-        with:
-          name: build
-          path: build
-      - run: npm run test
-
-  # lint
-  lint:
-    runs-on: self-hosted
-    needs: build
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - run: npm ci
-      - uses: actions/download-artifact@v2
-        with:
-          name: build
-          path: build
-      - run: npm run lint
-
     # deploy to npm
   # deploy:
   #   runs-on: self-hosted
-  #   needs: [build, test, lint]
+  #   needs: build
   #   steps:
   #     - uses: actions/checkout@v3
   #     - uses: actions/setup-node@v3
