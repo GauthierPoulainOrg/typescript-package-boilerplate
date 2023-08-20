@@ -7,7 +7,7 @@ export default [
   {
     input: 'src/index.ts',
     output: {
-      name: 'gapoulai-test-package',
+      name: 'typescript-package-boilerplate',
       file: pkg.browser,
       format: 'umd'
     },
